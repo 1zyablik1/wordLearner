@@ -30,8 +30,14 @@ function goHome() {
 
 // Режим карточек
 function startFlashcards() {
+    const words = getWords();
+    if (words.length === 0) {
+        alert('Добавьте слова для изучения!');
+        return;
+    }
+
     currentMode = 'flashcards';
-    shuffledWords = shuffle(WORDS);
+    shuffledWords = shuffle(words);
     currentIndex = 0;
     isFlipped = false;
 
@@ -68,7 +74,7 @@ function flipCard() {
         currentIndex++;
         if (currentIndex >= shuffledWords.length) {
             currentIndex = 0;
-            shuffledWords = shuffle(WORDS);
+            shuffledWords = shuffle(getWords());
         }
         showCurrentCard();
     }
@@ -76,8 +82,14 @@ function flipCard() {
 
 // Режим теста
 function startTest() {
+    const words = getWords();
+    if (words.length < 4) {
+        alert('Нужно минимум 4 слова для теста!');
+        return;
+    }
+
     currentMode = 'test';
-    shuffledWords = shuffle(WORDS).slice(0, 10); // 10 вопросов
+    shuffledWords = shuffle(words).slice(0, Math.min(10, words.length));
     currentIndex = 0;
     score = 0;
     answered = false;
@@ -111,8 +123,9 @@ function showCurrentQuestion() {
 }
 
 function generateOptions(correctWord) {
+    const words = getWords();
     const options = [correctWord];
-    const otherWords = WORDS.filter(w => w.word !== correctWord.word);
+    const otherWords = words.filter(w => w.word !== correctWord.word);
     const shuffledOthers = shuffle(otherWords);
 
     // Добавляем 3 неправильных варианта
@@ -181,4 +194,58 @@ function showResults() {
 
     document.getElementById('results-message').textContent = message;
     showPage('results-page');
+}
+
+// Добавление слов
+function showAddWord() {
+    showPage('add-word-page');
+    renderWordList();
+}
+
+async function addWord(event) {
+    event.preventDefault();
+
+    const wordInput = document.getElementById('new-word');
+    const translationInput = document.getElementById('new-translation');
+
+    const word = wordInput.value.trim();
+    const translation = translationInput.value.trim();
+
+    if (!word || !translation) return;
+
+    await saveWord(word, translation);
+
+    // Очищаем форму
+    wordInput.value = '';
+    translationInput.value = '';
+    wordInput.focus();
+}
+
+function renderWordList() {
+    const words = getWords();
+    const listEl = document.getElementById('word-list');
+    const totalEl = document.getElementById('total-words');
+
+    totalEl.textContent = words.length;
+
+    if (words.length === 0) {
+        listEl.innerHTML = '<p class="empty-list">Пока нет слов. Добавьте первое!</p>';
+        return;
+    }
+
+    listEl.innerHTML = words.map(item => `
+        <div class="word-item">
+            <div class="word-item-content">
+                <span class="word-item-word">${item.word}</span>
+                <span class="word-item-translation">${item.translation}</span>
+            </div>
+            <button class="delete-btn" onclick="confirmDelete('${item.id}', '${item.word}')">✕</button>
+        </div>
+    `).join('');
+}
+
+function confirmDelete(wordId, word) {
+    if (confirm(`Удалить слово "${word}"?`)) {
+        deleteWord(wordId);
+    }
 }

@@ -46,7 +46,14 @@ h1 {
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
     font-size: 1.1rem;
-    margin-bottom: 40px;
+    margin-bottom: 15px;
+}
+
+.word-count {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
 }
 
 .menu-buttons {
@@ -92,6 +99,18 @@ h1 {
 
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-tertiary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.9);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+.btn-tertiary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.6);
     transform: translateY(-2px);
 }
 
@@ -270,6 +289,113 @@ h2 {
     color: white;
     font-size: 1.2rem;
     margin-bottom: 30px;
+}
+
+/* Форма добавления слов */
+#add-word-form {
+    background: white;
+    padding: 25px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#add-word-form .btn {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Список слов */
+.word-list-header {
+    margin-bottom: 15px;
+}
+
+.word-list-header h3 {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.word-list {
+    max-height: 300px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.word-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.word-item:last-child {
+    margin-bottom: 0;
+}
+
+.word-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.word-item-word {
+    font-weight: 600;
+    color: #333;
+}
+
+.word-item-translation {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.3s;
+}
+
+.delete-btn:hover {
+    color: #eb3349;
+}
+
+.empty-list {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
 }
 
 /* Адаптивность */

@@ -12,6 +12,7 @@
         <div id="home-page" class="page active">
             <h1>Word Learner</h1>
             <p class="subtitle">Изучай новые слова легко</p>
+            <div class="word-count" id="word-count">Загрузка...</div>
             <div class="menu-buttons">
                 <button class="btn btn-primary" onclick="startFlashcards()">
                     <span class="btn-icon">📚</span>
@@ -20,6 +21,10 @@
                 <button class="btn btn-secondary" onclick="startTest()">
                     <span class="btn-icon">✍️</span>
                     Тест
+                </button>
+                <button class="btn btn-tertiary" onclick="showAddWord()">
+                    <span class="btn-icon">➕</span>
+                    Добавить слова
                 </button>
             </div>
         </div>
@@ -51,9 +56,7 @@
                 <span id="test-score">Правильно: 0</span>
             </div>
             <div class="test-word" id="test-word">Word</div>
-            <div class="test-options" id="test-options">
-                <!-- Варианты ответов будут добавлены через JS -->
-            </div>
+            <div class="test-options" id="test-options"></div>
             <button class="btn btn-next" id="next-btn" onclick="nextTestQuestion()" style="display: none;">
                 Следующий →
             </button>
@@ -69,8 +72,36 @@
                 <button class="btn btn-secondary" onclick="goHome()">На главную</button>
             </div>
         </div>
+
+        <!-- Добавление слов -->
+        <div id="add-word-page" class="page">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <h2>Добавить слова</h2>
+
+            <form id="add-word-form" onsubmit="addWord(event)">
+                <div class="form-group">
+                    <label for="new-word">Слово</label>
+                    <input type="text" id="new-word" placeholder="apple" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-translation">Перевод</label>
+                    <input type="text" id="new-translation" placeholder="яблоко" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </form>
+
+            <div class="word-list-header">
+                <h3>Все слова (<span id="total-words">0</span>)</h3>
+            </div>
+            <div class="word-list" id="word-list"></div>
+        </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+    <script src="firebase-config.js"></script>
     <script src="words.js"></script>
     <script src="app.js"></script>
 </body>
