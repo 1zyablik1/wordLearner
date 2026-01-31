@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Learner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Главная страница -->
+        <div id="home-page" class="page active">
+            <h1>Word Learner</h1>
+            <p class="subtitle">Изучай новые слова легко</p>
+            <div class="menu-buttons">
+                <button class="btn btn-primary" onclick="startFlashcards()">
+                    <span class="btn-icon">📚</span>
+                    Карточки
+                </button>
+                <button class="btn btn-secondary" onclick="startTest()">
+                    <span class="btn-icon">✍️</span>
+                    Тест
+                </button>
+            </div>
+        </div>
+
+        <!-- Режим карточек -->
+        <div id="flashcard-page" class="page">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <div class="progress-info">
+                <span id="flashcard-progress">1 / 10</span>
+            </div>
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+                <div class="flashcard-inner" id="flashcard-inner">
+                    <div class="flashcard-front">
+                        <span id="flashcard-word">Word</span>
+                    </div>
+                    <div class="flashcard-back">
+                        <span id="flashcard-translation">Перевод</span>
+                    </div>
+                </div>
+            </div>
+            <p class="hint">Нажми на карточку, чтобы увидеть перевод</p>
+        </div>
+
+        <!-- Режим теста -->
+        <div id="test-page" class="page">
+            <button class="back-btn" onclick="goHome()">← Назад</button>
+            <div class="progress-info">
+                <span id="test-progress">1 / 10</span>
+                <span id="test-score">Правильно: 0</span>
+            </div>
+            <div class="test-word" id="test-word">Word</div>
+            <div class="test-options" id="test-options">
+                <!-- Варианты ответов будут добавлены через JS -->
+            </div>
+            <button class="btn btn-next" id="next-btn" onclick="nextTestQuestion()" style="display: none;">
+                Следующий →
+            </button>
+        </div>
+
+        <!-- Результаты теста -->
+        <div id="results-page" class="page">
+            <h2>Результаты</h2>
+            <div class="results-score" id="results-score">8 / 10</div>
+            <p class="results-message" id="results-message">Отличный результат!</p>
+            <div class="menu-buttons">
+                <button class="btn btn-primary" onclick="startTest()">Пройти ещё раз</button>
+                <button class="btn btn-secondary" onclick="goHome()">На главную</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="words.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
