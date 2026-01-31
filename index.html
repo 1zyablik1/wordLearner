@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,15 @@
 </head>
 <body>
     <div class="container">
-        <!-- Главная страница -->
+        <!-- Головна сторінка -->
         <div id="home-page" class="page active">
             <h1>Word Learner</h1>
-            <p class="subtitle">Изучай новые слова легко</p>
-            <div class="word-count" id="word-count">Загрузка...</div>
+            <p class="subtitle">Вивчай нові слова легко</p>
+            <div class="word-count" id="word-count">Завантаження...</div>
+
+            <div class="name-input-wrapper">
+                <input type="text" id="user-name" placeholder="Введи своє ім'я" oninput="saveName()">
+            </div>
 
             <div class="direction-toggle" onclick="toggleDirection()">
                 <span id="direction-from">EN</span>
@@ -23,7 +27,7 @@
             <div class="menu-buttons">
                 <button class="btn btn-primary" onclick="startFlashcards()">
                     <span class="btn-icon">📚</span>
-                    Карточки
+                    Картки
                 </button>
                 <button class="btn btn-secondary" onclick="startTest()">
                     <span class="btn-icon">✍️</span>
@@ -31,12 +35,12 @@
                 </button>
                 <button class="btn btn-tertiary" onclick="showAddWord()">
                     <span class="btn-icon">➕</span>
-                    Добавить слова
+                    Додати слова
                 </button>
             </div>
         </div>
 
-        <!-- Режим карточек -->
+        <!-- Режим карток -->
         <div id="flashcard-page" class="page">
             <button class="back-btn" onclick="goHome()">← Назад</button>
             <div class="progress-info">
@@ -48,42 +52,42 @@
                         <span id="flashcard-word">Word</span>
                     </div>
                     <div class="flashcard-back">
-                        <span id="flashcard-translation">Перевод</span>
+                        <span id="flashcard-translation">Переклад</span>
                     </div>
                 </div>
             </div>
-            <p class="hint">Нажми на карточку, чтобы увидеть перевод</p>
+            <p class="hint">Натисни на картку, щоб побачити переклад</p>
         </div>
 
-        <!-- Режим теста -->
+        <!-- Режим тесту -->
         <div id="test-page" class="page">
             <button class="back-btn" onclick="goHome()">← Назад</button>
             <div class="progress-info">
                 <span id="test-progress">1 / 10</span>
-                <span id="test-score">Правильно: 0</span>
+                <span id="test-score">Вірно: 0</span>
             </div>
             <div class="test-word" id="test-word">Word</div>
             <div class="test-options" id="test-options"></div>
             <button class="btn btn-next" id="next-btn" onclick="nextTestQuestion()" style="display: none;">
-                Следующий →
+                Наступний →
             </button>
         </div>
 
-        <!-- Результаты теста -->
+        <!-- Результати тесту -->
         <div id="results-page" class="page">
-            <h2>Результаты</h2>
+            <h2>Результати</h2>
             <div class="results-score" id="results-score">8 / 10</div>
-            <p class="results-message" id="results-message">Отличный результат!</p>
+            <p class="results-message" id="results-message">Відмінний результат!</p>
             <div class="menu-buttons">
-                <button class="btn btn-primary" onclick="startTest()">Пройти ещё раз</button>
-                <button class="btn btn-secondary" onclick="goHome()">На главную</button>
+                <button class="btn btn-primary" onclick="startTest()">Пройти ще раз</button>
+                <button class="btn btn-secondary" onclick="goHome()">На головну</button>
             </div>
         </div>
 
-        <!-- Добавление слов -->
+        <!-- Додавання слів -->
         <div id="add-word-page" class="page">
             <button class="back-btn" onclick="goHome()">← Назад</button>
-            <h2>Добавить слова</h2>
+            <h2>Додати слова</h2>
 
             <form id="add-word-form" onsubmit="addWord(event)">
                 <div class="form-group">
@@ -91,14 +95,14 @@
                     <input type="text" id="new-word" placeholder="apple" required>
                 </div>
                 <div class="form-group">
-                    <label for="new-translation">Перевод</label>
-                    <input type="text" id="new-translation" placeholder="яблоко" required>
+                    <label for="new-translation">Переклад</label>
+                    <input type="text" id="new-translation" placeholder="яблуко" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Добавить</button>
+                <button type="submit" class="btn btn-primary">Додати</button>
             </form>
 
             <div class="word-list-header">
-                <h3>Все слова (<span id="total-words">0</span>)</h3>
+                <h3>Всі слова (<span id="total-words">0</span>)</h3>
             </div>
             <div class="word-list" id="word-list"></div>
         </div>

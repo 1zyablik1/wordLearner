@@ -29,6 +29,31 @@ function goHome() {
     showPage('home-page');
 }
 
+// Работа с именем пользователя
+function saveName() {
+    const name = document.getElementById('user-name').value.trim();
+    localStorage.setItem('userName', name);
+}
+
+function loadName() {
+    const savedName = localStorage.getItem('userName') || '';
+    document.getElementById('user-name').value = savedName;
+}
+
+function getUserName() {
+    return document.getElementById('user-name').value.trim();
+}
+
+function checkName() {
+    const name = getUserName();
+    if (!name) {
+        alert('Введи своє ім\'я, щоб почати!');
+        document.getElementById('user-name').focus();
+        return false;
+    }
+    return true;
+}
+
 // Переключение направления перевода
 function toggleDirection() {
     isReversed = !isReversed;
@@ -51,11 +76,15 @@ function getAnswer(card) {
 
 // Режим карточек
 function startFlashcards() {
+    if (!checkName()) return;
+
     const words = getWords();
     if (words.length === 0) {
-        alert('Добавьте слова для изучения!');
+        alert('Додайте слова для вивчення!');
         return;
     }
+
+    trackClick('flashcards');
 
     currentMode = 'flashcards';
     shuffledWords = shuffle(words);
@@ -103,11 +132,15 @@ function flipCard() {
 
 // Режим теста
 function startTest() {
+    if (!checkName()) return;
+
     const words = getWords();
     if (words.length < 4) {
-        alert('Нужно минимум 4 слова для теста!');
+        alert('Потрібно мінімум 4 слова для тесту!');
         return;
     }
+
+    trackClick('test');
 
     currentMode = 'test';
     shuffledWords = shuffle(words).slice(0, Math.min(10, words.length));
@@ -124,7 +157,7 @@ function showCurrentQuestion() {
     document.getElementById('test-word').textContent = getQuestion(currentWord);
     document.getElementById('test-progress').textContent =
         `${currentIndex + 1} / ${shuffledWords.length}`;
-    document.getElementById('test-score').textContent = `Правильно: ${score}`;
+    document.getElementById('test-score').textContent = `Вірно: ${score}`;
 
     // Генерируем варианты ответов
     const options = generateOptions(currentWord);
@@ -173,7 +206,7 @@ function selectAnswer(button, isCorrect) {
     if (isCorrect) {
         button.classList.add('correct');
         score++;
-        document.getElementById('test-score').textContent = `Правильно: ${score}`;
+        document.getElementById('test-score').textContent = `Вірно: ${score}`;
     } else {
         button.classList.add('wrong');
         // Показываем правильный ответ
@@ -206,15 +239,15 @@ function showResults() {
     const percentage = score / shuffledWords.length;
 
     if (percentage === 1) {
-        message = 'Превосходно! Идеальный результат!';
+        message = 'Чудово! Ідеальний результат!';
     } else if (percentage >= 0.8) {
-        message = 'Отличный результат!';
+        message = 'Відмінний результат!';
     } else if (percentage >= 0.6) {
-        message = 'Хорошо! Продолжай практиковаться!';
+        message = 'Добре! Продовжуй практикуватися!';
     } else if (percentage >= 0.4) {
-        message = 'Неплохо, но есть куда расти!';
+        message = 'Непогано, але є куди рости!';
     } else {
-        message = 'Стоит повторить слова ещё раз!';
+        message = 'Варто повторити слова ще раз!';
     }
 
     document.getElementById('results-message').textContent = message;
@@ -223,6 +256,10 @@ function showResults() {
 
 // Добавление слов
 function showAddWord() {
+    if (!checkName()) return;
+
+    trackClick('add_words');
+
     showPage('add-word-page');
     renderWordList();
 }
@@ -254,7 +291,7 @@ function renderWordList() {
     totalEl.textContent = words.length;
 
     if (words.length === 0) {
-        listEl.innerHTML = '<p class="empty-list">Пока нет слов. Добавьте первое!</p>';
+        listEl.innerHTML = '<p class="empty-list">Поки немає слів. Додайте перше!</p>';
         return;
     }
 
@@ -270,7 +307,33 @@ function renderWordList() {
 }
 
 function confirmDelete(wordId, word) {
-    if (confirm(`Удалить слово "${word}"?`)) {
+    if (confirm(`Видалити слово "${word}"?`)) {
         deleteWord(wordId);
     }
 }
+
+// Аналитика
+function formatDateTime(date) {
+    const pad = (n) => n.toString().padStart(2, '0');
+    const dd = pad(date.getDate());
+    const mm = pad(date.getMonth() + 1);
+    const yy = date.getFullYear().toString().slice(-2);
+    const hh = pad(date.getHours());
+    const min = pad(date.getMinutes());
+    const ss = pad(date.getSeconds());
+    return `${dd}:${mm}:${yy} ${hh}:${min}:${ss}`;
+}
+
+function trackClick(button) {
+    const data = {
+        timestamp: formatDateTime(new Date()),
+        name: getUserName(),
+        button: button
+    };
+    saveAnalytics(data);
+}
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    loadName();
+});

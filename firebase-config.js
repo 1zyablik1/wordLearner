@@ -12,6 +12,7 @@ const firebaseConfig = {
 // Инициализация Firebase
 let db = null;
 let wordsRef = null;
+let analyticsRef = null;
 let allWords = [];
 
 function initFirebase() {
@@ -19,6 +20,7 @@ function initFirebase() {
         firebase.initializeApp(firebaseConfig);
         db = firebase.database();
         wordsRef = db.ref('words');
+        analyticsRef = db.ref('analytics');
 
         // Слушаем изменения в базе данных
         wordsRef.on('value', (snapshot) => {
@@ -50,7 +52,7 @@ function initFirebase() {
 function updateWordCount() {
     const countEl = document.getElementById('word-count');
     if (countEl) {
-        countEl.textContent = `Слов в словаре: ${allWords.length}`;
+        countEl.textContent = `Слів у словнику: ${allWords.length}`;
     }
 }
 
@@ -81,6 +83,20 @@ async function deleteWord(wordId) {
     }
 
     await wordsRef.child(wordId).remove();
+}
+
+async function saveAnalytics(data) {
+    if (!analyticsRef) {
+        console.log('Analytics:', data);
+        return;
+    }
+
+    try {
+        const newRef = analyticsRef.push();
+        await newRef.set(data);
+    } catch (error) {
+        console.warn('Analytics error:', error.message);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -56,6 +56,32 @@ h1 {
     margin-bottom: 20px;
 }
 
+.name-input-wrapper {
+    margin-bottom: 20px;
+}
+
+.name-input-wrapper input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.name-input-wrapper input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.name-input-wrapper input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.25);
+}
+
 .direction-toggle {
     display: flex;
     align-items: center;
