@@ -5,6 +5,7 @@ let currentIndex = 0;
 let isFlipped = false;
 let score = 0;
 let answered = false;
+let isReversed = false; // false = EN→UA, true = UA→EN
 
 // Утилиты
 function shuffle(array) {
@@ -28,6 +29,26 @@ function goHome() {
     showPage('home-page');
 }
 
+// Переключение направления перевода
+function toggleDirection() {
+    isReversed = !isReversed;
+    updateDirectionDisplay();
+}
+
+function updateDirectionDisplay() {
+    document.getElementById('direction-from').textContent = isReversed ? 'UA' : 'EN';
+    document.getElementById('direction-to').textContent = isReversed ? 'EN' : 'UA';
+}
+
+// Получение слова и перевода с учётом направления
+function getQuestion(card) {
+    return isReversed ? card.translation : card.word;
+}
+
+function getAnswer(card) {
+    return isReversed ? card.word : card.translation;
+}
+
 // Режим карточек
 function startFlashcards() {
     const words = getWords();
@@ -49,14 +70,14 @@ function showCurrentCard() {
     const card = shuffledWords[currentIndex];
     const translationEl = document.getElementById('flashcard-translation');
 
-    document.getElementById('flashcard-word').textContent = card.word;
+    document.getElementById('flashcard-word').textContent = getQuestion(card);
     document.getElementById('flashcard-progress').textContent =
         `${currentIndex + 1} / ${shuffledWords.length}`;
 
     // Сброс состояния карточки
     document.getElementById('flashcard').classList.remove('flipped');
     translationEl.style.visibility = 'hidden';
-    translationEl.textContent = card.translation;
+    translationEl.textContent = getAnswer(card);
     isFlipped = false;
 }
 
@@ -100,7 +121,7 @@ function startTest() {
 
 function showCurrentQuestion() {
     const currentWord = shuffledWords[currentIndex];
-    document.getElementById('test-word').textContent = currentWord.word;
+    document.getElementById('test-word').textContent = getQuestion(currentWord);
     document.getElementById('test-progress').textContent =
         `${currentIndex + 1} / ${shuffledWords.length}`;
     document.getElementById('test-score').textContent = `Правильно: ${score}`;
@@ -110,11 +131,14 @@ function showCurrentQuestion() {
     const optionsContainer = document.getElementById('test-options');
     optionsContainer.innerHTML = '';
 
+    const correctAnswer = getAnswer(currentWord);
+
     options.forEach(option => {
         const btn = document.createElement('button');
         btn.className = 'option-btn';
-        btn.textContent = option.translation;
-        btn.onclick = () => selectAnswer(btn, option.translation === currentWord.translation);
+        const optionAnswer = getAnswer(option);
+        btn.textContent = optionAnswer;
+        btn.onclick = () => selectAnswer(btn, optionAnswer === correctAnswer);
         optionsContainer.appendChild(btn);
     });
 
@@ -125,7 +149,8 @@ function showCurrentQuestion() {
 function generateOptions(correctWord) {
     const words = getWords();
     const options = [correctWord];
-    const otherWords = words.filter(w => w.word !== correctWord.word);
+    const correctQuestion = getQuestion(correctWord);
+    const otherWords = words.filter(w => getQuestion(w) !== correctQuestion);
     const shuffledOthers = shuffle(otherWords);
 
     // Добавляем 3 неправильных варианта
@@ -152,9 +177,9 @@ function selectAnswer(button, isCorrect) {
     } else {
         button.classList.add('wrong');
         // Показываем правильный ответ
-        const correctTranslation = shuffledWords[currentIndex].translation;
+        const correctAnswer = getAnswer(shuffledWords[currentIndex]);
         document.querySelectorAll('.option-btn').forEach(btn => {
-            if (btn.textContent === correctTranslation) {
+            if (btn.textContent === correctAnswer) {
                 btn.classList.add('correct');
             }
         });
